@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class JavaPlayerTest {
 	
-	private final String pathToMovie = null;
+	private final String pathToMovie = "./etc/CIMG2197.MOV";
 
 	@Before
 	public void checkIsPathToMovieFileProvided(){

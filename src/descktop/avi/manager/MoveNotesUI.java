@@ -1,15 +1,17 @@
 package descktop.avi.manager;
 
 import java.awt.BorderLayout;
+import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 
 public class MoveNotesUI {
 
@@ -29,12 +31,60 @@ public class MoveNotesUI {
 		int i = 1;
 		dataModel.addRow(new Object[]{i++,"etc","CIMG2197.MOV"});
 		dataModel.addRow(new Object[]{i++,"etc2","CIMG2220.MOV"});
+		MovieStorage.STORAGE.put("etc", "./etc/");
+		MovieStorage.STORAGE.put("etc2", "./etc/");
 
-		mediaFiles.setModel(dataModel);		//frame.pack();
+		mediaFiles.setModel(dataModel);
 		mediaFiles.createDefaultColumnsFromModel();
-
+		mediaFiles.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.out.println("mousePressed" + e.getClickCount());
+				if(e.getClickCount() == 2){
+				try {
+					JTable table  = (JTable)e.getSource();
+					Point p = e.getPoint();
+					int rowAtPoint = table.rowAtPoint(p);
+					System.out.println("Clicked row: " + rowAtPoint);
+					System.out.println("File name:" + table.getValueAt(rowAtPoint, 2));
+					String movieFile = MovieStorage.STORAGE.get(table.getValueAt(rowAtPoint, 1)) + table.getValueAt(rowAtPoint, 2);
+					if(movieFile == null)
+						throw new RuntimeException("Movie file is not provided.");
+					Runtime.getRuntime().exec("totem " + movieFile);
+				} catch (IOException ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+				}}
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				
+			}
+		});
+		
 		JScrollPane comp = new JScrollPane(mediaFiles);
-		//frame.pack();
+
 		frame.getContentPane().add(comp,BorderLayout.CENTER);
 				
 		frame.setSize(300, 300);
