@@ -24,6 +24,7 @@ public class MoveNotesUI {
 		JPanel buttonPanel = new JPanel();
 		JDialog addFolderDialog = new JDialog(frame);
 		JButton addFolderButton = new JButton("Add Folder");
+		DefaultTableModel dataModel = createTableModel();
 		addFolderButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -39,7 +40,9 @@ public class MoveNotesUI {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						addFolderDialog.setVisible(false);
-						
+						int i = 3;
+						dataModel.addRow(new Object[]{i++, "etc3","CIMG2220.MOV"});
+						MovieStorage.STORAGE.put("etc3", "./etc/");
 					}
 				});
 				submitPanel.add(submit);
@@ -52,15 +55,7 @@ public class MoveNotesUI {
 		frame.getContentPane().add(buttonPanel,BorderLayout.NORTH);
 		
 		JTable mediaFiles = new JTable();
-		DefaultTableModel dataModel = new DefaultTableModel();
-		dataModel.addColumn("№");
-		dataModel.addColumn("Folder");
-		dataModel.addColumn("Files");
-		int i = 1;
-		dataModel.addRow(new Object[]{i++,"etc","CIMG2197.MOV"});
-		dataModel.addRow(new Object[]{i++,"etc2","CIMG2220.MOV"});
-		MovieStorage.STORAGE.put("etc", "./etc/");
-		MovieStorage.STORAGE.put("etc2", "./etc/");
+		
 
 		mediaFiles.setModel(dataModel);
 		mediaFiles.createDefaultColumnsFromModel();
@@ -118,5 +113,18 @@ public class MoveNotesUI {
 		frame.setSize(300, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+	}
+
+	private static DefaultTableModel createTableModel() {
+		DefaultTableModel dataModel = new DefaultTableModel();
+		dataModel.addColumn("№");
+		dataModel.addColumn("Folder");
+		dataModel.addColumn("Files");
+		int i = 1;
+		dataModel.addRow(new Object[]{i++,"etc","CIMG2197.MOV"});
+		dataModel.addRow(new Object[]{i++,"etc2","CIMG2220.MOV"});
+		MovieStorage.STORAGE.put("etc", "./etc/");
+		MovieStorage.STORAGE.put("etc2", "./etc/");
+		return dataModel;
 	}
 }
