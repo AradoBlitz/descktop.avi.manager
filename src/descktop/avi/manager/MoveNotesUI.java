@@ -2,12 +2,16 @@ package descktop.avi.manager;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -18,7 +22,31 @@ public class MoveNotesUI {
 	public static void main(String args[]){
 		JFrame frame = new JFrame("Movie Notes");				
 		JPanel buttonPanel = new JPanel();
+		JDialog addFolderDialog = new JDialog(frame);
 		JButton addFolderButton = new JButton("Add Folder");
+		addFolderButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JLabel label = new JLabel("Dialog");
+				addFolderDialog.setSize(400, 100);
+				addFolderDialog.getContentPane().add(label);
+				JPanel submitPanel = new JPanel();
+				addFolderDialog.getContentPane().add(submitPanel,BorderLayout.SOUTH);
+				JButton submit = new JButton("Submit");
+				submit.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						addFolderDialog.setVisible(false);
+						
+					}
+				});
+				submitPanel.add(submit);
+				addFolderDialog.setVisible(true);
+				
+			}
+		});
 		buttonPanel.add(addFolderButton);
 
 		frame.getContentPane().add(buttonPanel,BorderLayout.NORTH);
