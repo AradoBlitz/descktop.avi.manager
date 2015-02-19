@@ -25,14 +25,15 @@ public class MoveNotesUI {
 		JPanel buttonPanel = new JPanel();
 		JDialog addFolderDialog = new JDialog(frame);
 		JButton addFolderButton = new JButton("Add Folder");
-		int i1 = 1;
-		DefaultTableModel dataModel = fillDataModel(
+		MovieManager movieManager = new MovieManager();
+		int i = 1;
+		MovieStorage storage = new MovieStorage(new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}});
+		Object[][] dataForTable = movieManager.prepare(storage.getData());
+		DefaultTableModel dataModel = movieManager.fillDataModel(
 			createTableModel(new String[]{"№","Folder","Files"})
-			, new Object[][]{
-			{i1++,"etc","CIMG2197.MOV"}
-			,{i1++,"etc2","CIMG2220.MOV"}
-		});
-		MovieStorage storage = new MovieStorage(new String[][]{{"etc", "./etc/"},{"etc2", "./etc/"}});
+			, dataForTable);
+	
+		
 		addFolderButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -49,8 +50,9 @@ public class MoveNotesUI {
 					public void actionPerformed(ActionEvent e) {
 						addFolderDialog.setVisible(false);
 						int i = 3;
-						dataModel.addRow(new Object[]{i++, "etc3","CIMG2220.MOV"});
-						MovieStorage.STORAGE.put("etc3", "./etc/");
+						//movieManager.fillDataModel(dataModel, new Object[][]{{null, "etc3","CIMG2220.MOV"}});
+						movieManager.fillDataModel(dataModel,movieManager.prepare(storage.add("etc3","./etc/","CIMG2220.MOV")));
+						
 					}
 				});
 				submitPanel.add(submit);
@@ -133,7 +135,7 @@ public class MoveNotesUI {
 			});	
 	}
 
-	private static DefaultTableModel fillDataModel(DefaultTableModel dataModel,
+	public static DefaultTableModel fillDataModel(DefaultTableModel dataModel,
 			Object[][] rows) {
 		dataModel.addRow(rows[0]);
 		dataModel.addRow(rows[1]);
