@@ -29,9 +29,9 @@ public class MovieStorage {
 	}
 
 
-	public Object[][] add(String string, String string2, String string3) {
-		MovieStorage.STORAGE.put("etc3", "./etc/");
-		return new Object[][]{{string,string2,string3}};
+	public Object[][] add(String alias, String path, String movie) {
+		MovieStorage.STORAGE.put(alias, path); 
+		return new Object[][]{{alias,path,movie}};
 	}	
 	
 }

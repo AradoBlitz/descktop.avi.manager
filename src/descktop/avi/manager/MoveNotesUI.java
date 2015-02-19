@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -15,8 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 public class MoveNotesUI {
 
@@ -38,21 +39,31 @@ public class MoveNotesUI {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JLabel label = new JLabel("Dialog");
+			
 				addFolderDialog.setSize(400, 100);
-				addFolderDialog.getContentPane().add(label);
+			
 				JPanel submitPanel = new JPanel();
-				addFolderDialog.getContentPane().add(submitPanel,BorderLayout.SOUTH);
+				addFolderDialog.getContentPane().add(submitPanel);
+				
+				JLabel labelAlias = new JLabel("Alias");
+				JTextField aliasValue = new JTextField(26);
+				submitPanel.add(labelAlias);
+				submitPanel.add(aliasValue);
+				JLabel labelPathToDir = new JLabel("Path to dir");
+				JTextField pathToMediaDir = new JTextField(26);
+				submitPanel.add(labelPathToDir);
+				submitPanel.add(pathToMediaDir);
 				JButton submit = new JButton("Submit");
 				submit.addActionListener(new ActionListener() {
 					
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						addFolderDialog.setVisible(false);
-						int i = 3;
-						//movieManager.fillDataModel(dataModel, new Object[][]{{null, "etc3","CIMG2220.MOV"}});
-						movieManager.fillDataModel(dataModel,movieManager.prepare(storage.add("etc3","./etc/","CIMG2220.MOV")));
-						
+						File movieDir = new File(pathToMediaDir.getText());
+						for(File movieFile : movieDir.listFiles())
+							movieManager.addMovies(dataModel,storage.add(aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName()));
+						aliasValue.setText(null);
+						pathToMediaDir.setText(null);
 					}
 				});
 				submitPanel.add(submit);

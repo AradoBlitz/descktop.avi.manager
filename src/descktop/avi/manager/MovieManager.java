@@ -23,4 +23,9 @@ public class MovieManager {
 		return objects;
 	}
 
+	public void addMovies(DefaultTableModel dataModel, Object[][] add) {
+		fillDataModel(dataModel,prepare(add));
+		
+	}
+
 }
