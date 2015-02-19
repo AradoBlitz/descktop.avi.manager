@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 public class MoveNotesUI {
 
@@ -24,7 +25,14 @@ public class MoveNotesUI {
 		JPanel buttonPanel = new JPanel();
 		JDialog addFolderDialog = new JDialog(frame);
 		JButton addFolderButton = new JButton("Add Folder");
-		DefaultTableModel dataModel = createTableModel();
+		int i1 = 1;
+		DefaultTableModel dataModel = fillDataModel(
+			createTableModel(new String[]{"№","Folder","Files"})
+			, new Object[][]{
+			{i1++,"etc","CIMG2197.MOV"}
+			,{i1++,"etc2","CIMG2220.MOV"}
+		});
+		MovieStorage storage = new MovieStorage(new String[][]{{"etc", "./etc/"},{"etc2", "./etc/"}});
 		addFolderButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -116,15 +124,26 @@ public class MoveNotesUI {
 	}
 
 	private static DefaultTableModel createTableModel() {
-		DefaultTableModel dataModel = new DefaultTableModel();
-		dataModel.addColumn("№");
-		dataModel.addColumn("Folder");
-		dataModel.addColumn("Files");
 		int i = 1;
-		dataModel.addRow(new Object[]{i++,"etc","CIMG2197.MOV"});
-		dataModel.addRow(new Object[]{i++,"etc2","CIMG2220.MOV"});
-		MovieStorage.STORAGE.put("etc", "./etc/");
-		MovieStorage.STORAGE.put("etc2", "./etc/");
+		return fillDataModel(
+				createTableModel(new String[]{"№","Folder","Files"})
+				, new Object[][]{
+				{i++,"etc","CIMG2197.MOV"}
+				,{i++,"etc2","CIMG2220.MOV"}
+			});	
+	}
+
+	private static DefaultTableModel fillDataModel(DefaultTableModel dataModel,
+			Object[][] rows) {
+		dataModel.addRow(rows[0]);
+		dataModel.addRow(rows[1]);
+		return dataModel;
+	}
+
+	private static DefaultTableModel createTableModel(String[] columns) {
+		DefaultTableModel dataModel = new DefaultTableModel();
+		for(int c = 0;c<columns.length;c++)
+			dataModel.addColumn(columns[c]);
 		return dataModel;
 	}
 }
