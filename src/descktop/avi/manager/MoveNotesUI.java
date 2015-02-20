@@ -26,13 +26,11 @@ public class MoveNotesUI {
 		JPanel buttonPanel = new JPanel();
 		JDialog addFolderDialog = new JDialog(frame);
 		JButton addFolderButton = new JButton("Add Folder");
-		MovieManager movieManager = new MovieManager();
-
-		MovieStorage storage = new MovieStorage(new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}});	
-		Object[][] dataForTable = movieManager.prepare(storage.getData());
-		DefaultTableModel dataModel = movieManager.fillDataModel(
-			createTableModel(new String[]{"№","Folder","Files"})
-			, dataForTable);
+		Movie movie = new Movie();
+		
+		
+		DefaultTableModel dataModel = movie.initTableModel(new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}},createTableModel(new String[]{"№","Folder","Files"}));
+		
 	
 		
 		addFolderButton.addActionListener(new ActionListener() {
@@ -60,8 +58,10 @@ public class MoveNotesUI {
 					public void actionPerformed(ActionEvent e) {
 						addFolderDialog.setVisible(false);
 						File movieDir = new File(pathToMediaDir.getText());
+						
 						for(File movieFile : movieDir.listFiles())
-							movieManager.addMovies(dataModel,storage.add(aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName()));
+							movie.add(dataModel,aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName());
+							
 						aliasValue.setText(null);
 						pathToMediaDir.setText(null);
 					}
@@ -99,7 +99,7 @@ public class MoveNotesUI {
 					System.out.println("Clicked row: " + rowAtPoint);
 					System.out.println("File name:" + table.getValueAt(rowAtPoint, 2));
 					
-					String movieFile = storage.getPathToMovie(table.getValueAt(rowAtPoint, 1)) + table.getValueAt(rowAtPoint, 2);
+					String movieFile = movie.getPathByAlias(table.getValueAt(rowAtPoint, 1))  + table.getValueAt(rowAtPoint, 2);
 					if(movieFile == null)
 						throw new RuntimeException("Movie file is not provided.");
 					Runtime.getRuntime().exec("totem " + movieFile);
@@ -135,16 +135,6 @@ public class MoveNotesUI {
 		frame.setSize(300, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-	}
-
-	private static DefaultTableModel createTableModel() {
-		int i = 1;
-		return fillDataModel(
-				createTableModel(new String[]{"№","Folder","Files"})
-				, new Object[][]{
-				{i++,"etc","CIMG2197.MOV"}
-				,{i++,"etc2","CIMG2220.MOV"}
-			});	
 	}
 
 	public static DefaultTableModel fillDataModel(DefaultTableModel dataModel,

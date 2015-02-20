@@ -12,8 +12,7 @@ public class MovieStorage {
 	
 	public MovieStorage(String[][] storageData) {
 		this.storageData = storageData;
-		for(int i = 0;i<storageData.length;i++)
-			MovieStorage.STORAGE.put(storageData[i][0], storageData[i][1]);
+		add(storageData);
 	}
 
 
@@ -23,8 +22,9 @@ public class MovieStorage {
 	}
 
 
-	public void add(Object[][] objects) {
-		// TODO Auto-generated method stub
+	public void add(Object[][] storageData) {
+		for(int i = 0;i<storageData.length;i++)
+			MovieStorage.STORAGE.put((String)storageData[i][0], (String)storageData[i][1]);
 		
 	}
 
