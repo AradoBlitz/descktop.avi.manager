@@ -28,9 +28,8 @@ public class MoveNotesUI {
 		JButton addFolderButton = new JButton("Add Folder");
 		MovieManager movieManager = new MovieManager();
 
-		String[][] initialData = new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}};
-		MovieStorage storage = new MovieStorage(initialData);	
-		Object[][] dataForTable = movieManager.prepare(initialData);
+		MovieStorage storage = new MovieStorage(new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}});	
+		Object[][] dataForTable = movieManager.prepare(storage.getData());
 		DefaultTableModel dataModel = movieManager.fillDataModel(
 			createTableModel(new String[]{"№","Folder","Files"})
 			, dataForTable);
