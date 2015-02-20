@@ -9,7 +9,7 @@ public class MovieManager {
 	public DefaultTableModel fillDataModel(DefaultTableModel dataModel,
 			Object[][] rows) {
 		for(int r = 0;r<rows.length;r++){
-			//rows[r][0] = i++;
+
 			dataModel.addRow(rows[r]);
 		}
 
@@ -18,7 +18,7 @@ public class MovieManager {
 
 	public Object[][] prepare(Object[][] data) {
 		Object[][] objects = new Object[data.length][3];
-		for(int r = 0;r<data.length;r++)
+		for(int r = 0;r < data.length;r++)
 			objects[r] = new Object[] {i++,data[r][0],data[r][2]};
 		return objects;
 	}

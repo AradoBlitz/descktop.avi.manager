@@ -27,9 +27,10 @@ public class MoveNotesUI {
 		JDialog addFolderDialog = new JDialog(frame);
 		JButton addFolderButton = new JButton("Add Folder");
 		MovieManager movieManager = new MovieManager();
-		int i = 1;
-		MovieStorage storage = new MovieStorage(new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}});
-		Object[][] dataForTable = movieManager.prepare(storage.getData());
+
+		String[][] initialData = new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}};
+		MovieStorage storage = new MovieStorage(initialData);	
+		Object[][] dataForTable = movieManager.prepare(initialData);
 		DefaultTableModel dataModel = movieManager.fillDataModel(
 			createTableModel(new String[]{"№","Folder","Files"})
 			, dataForTable);
@@ -98,7 +99,8 @@ public class MoveNotesUI {
 					int rowAtPoint = table.rowAtPoint(p);
 					System.out.println("Clicked row: " + rowAtPoint);
 					System.out.println("File name:" + table.getValueAt(rowAtPoint, 2));
-					String movieFile = MovieStorage.STORAGE.get(table.getValueAt(rowAtPoint, 1)) + table.getValueAt(rowAtPoint, 2);
+					
+					String movieFile = storage.getPathToMovie(table.getValueAt(rowAtPoint, 1)) + table.getValueAt(rowAtPoint, 2);
 					if(movieFile == null)
 						throw new RuntimeException("Movie file is not provided.");
 					Runtime.getRuntime().exec("totem " + movieFile);
