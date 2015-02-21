@@ -22,6 +22,17 @@ import javax.swing.table.DefaultTableModel;
 public class MoveNotesUI {
 
 	public static void main(String args[]){
+		String[][] loadedMovies = new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}};
+		
+		try {
+			movieNotes(new FileMoviesDataBase().loadMelodies("./etc/movie.db.txt"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace();
+		}
+	}
+
+	private static void movieNotes(String[][] loadedMovies) {
 		JFrame frame = new JFrame("Movie Notes");				
 		JPanel buttonPanel = new JPanel();
 		JDialog addFolderDialog = new JDialog(frame);
@@ -29,7 +40,8 @@ public class MoveNotesUI {
 		Movie movie = new Movie();
 		
 		
-		DefaultTableModel dataModel = movie.initTableModel(new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}},createTableModel(new String[]{"№","Folder","Files"}));
+		
+		DefaultTableModel dataModel = movie.initTableModel(loadedMovies,createTableModel(new String[]{"№","Folder","Files"}));
 		
 	
 		
@@ -59,9 +71,15 @@ public class MoveNotesUI {
 						addFolderDialog.setVisible(false);
 						File movieDir = new File(pathToMediaDir.getText());
 						
-						for(File movieFile : movieDir.listFiles())
+						for(File movieFile : movieDir.listFiles()){
+							try {
+								new FileMoviesDataBase().saveTo("./etc/movie.db.txt",new String[][]{{aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName()}});
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							movie.add(dataModel,aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName());
-							
+						}	
 						aliasValue.setText(null);
 						pathToMediaDir.setText(null);
 					}

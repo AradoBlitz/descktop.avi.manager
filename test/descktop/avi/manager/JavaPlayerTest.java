@@ -31,7 +31,23 @@ public class JavaPlayerTest {
 		Player createPlayer = Manager.createPlayer(new File(pathToMovie).toURL());
 		assertNotNull(createPlayer);
 		assertEquals("New Player shoud be Controler.Unrealized state.", Player.Unrealized,createPlayer.getState());
-
 	}
 	
+	@Test
+	public void melodiesFileDataBase() throws Exception {
+		
+		String databaseFile = "./etc/test/movie.db";
+		new File(databaseFile).createNewFile();
+		new File(databaseFile).deleteOnExit();
+		
+		new FileMoviesDataBase().saveTo(databaseFile,new String[][]{
+					{"etc", "./etc/","CIMG2197.MOV"}
+					,{"etc2", "./etc/","CIMG2220.MOV"}
+					});
+		assertArrayEquals(new String[][]{
+					{"etc", "./etc/","CIMG2197.MOV"}
+					,{"etc2", "./etc/","CIMG2220.MOV"}
+					}, new FileMoviesDataBase().loadMelodies(databaseFile));
+		
+	}
 }
