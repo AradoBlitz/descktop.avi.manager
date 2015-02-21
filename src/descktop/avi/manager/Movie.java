@@ -1,9 +1,14 @@
 package descktop.avi.manager;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.table.DefaultTableModel;
 
 public class Movie {
 
+	protected static final Map<String,String> STORAGE = new HashMap<String,String>();
+	
     private int i = 1;
 
     public DefaultTableModel initTableModel(String[][] strings, DefaultTableModel createTableModel) {
@@ -37,13 +42,13 @@ public class Movie {
 	
 	public void add(Object[][] storageData) {
 		for(int i = 0;i<storageData.length;i++)
-			MovieStorage.STORAGE.put((String)storageData[i][0], (String)storageData[i][1]);
+			STORAGE.put((String)storageData[i][0], (String)storageData[i][1]);
 		
 	}
 	
 	public String getPathByAlias(Object valueAt) {
 		// TODO Auto-generated method stub
-		return MovieStorage.STORAGE.get(valueAt);
+		return STORAGE.get(valueAt);
 	}
 
 }
