@@ -72,13 +72,8 @@ public class MoveNotesUI {
 						File movieDir = new File(pathToMediaDir.getText());
 						
 						for(File movieFile : movieDir.listFiles()){
-							try {
-								new FileMoviesDataBase().saveTo("./etc/movie.db.txt",new String[][]{{aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName()}});
-							} catch (Exception e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							movie.add(dataModel,aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName());
+							//"./etc/movie.db.txt"
+							movie.add("./etc/movie.db.txt",dataModel,aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName());
 						}	
 						aliasValue.setText(null);
 						pathToMediaDir.setText(null);

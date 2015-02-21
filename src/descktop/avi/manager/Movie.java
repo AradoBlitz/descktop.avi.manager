@@ -8,6 +8,8 @@ import javax.swing.table.DefaultTableModel;
 public class Movie {
 
 	protected static final Map<String,String> STORAGE = new HashMap<String,String>();
+
+	public static final String NO_PATH_TO_DB = "NO_PATH_TO_DB";
 	
     private int i = 1;
 
@@ -34,12 +36,30 @@ public class Movie {
 		return dataModel;
 	}
 	public void add(DefaultTableModel dataModel, String text, String text2, String name) {
-		Object[] add = new Object[]{ text, text2, name};
-		add(new Object[][]{add});
-		fillDataModel(dataModel,prepare(new Object[][]{add}));
+		//new FileMoviesDataBase().saveTo("./etc/movie.db.txt",new String[][]{{aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName()}});
+		add(NO_PATH_TO_DB,dataModel,text,text2,name);
+		
 		
 	}
 	
+	public void add(String noPathToDb, DefaultTableModel dataModel,
+			String text, String text2, String name) {
+		try {
+			if(!NO_PATH_TO_DB.equals(noPathToDb)){
+				new FileMoviesDataBase().saveTo(noPathToDb,new String[][]{{text,text2,name}});
+			} else {
+				System.out.println("No path to db. Skip saving.");
+			}
+			Object[] add = new Object[]{ text, text2, name};
+			add(new Object[][]{add});
+			fillDataModel(dataModel,prepare(new Object[][]{add}));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 	public void add(Object[][] storageData) {
 		for(int i = 0;i<storageData.length;i++)
 			STORAGE.put((String)storageData[i][0], (String)storageData[i][1]);
