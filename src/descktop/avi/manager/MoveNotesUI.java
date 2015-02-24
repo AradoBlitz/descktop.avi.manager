@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,7 +43,7 @@ public class MoveNotesUI {
 		
 		
 		DefaultTableModel dataModel = movie.initTableModel(loadedMovies,createTableModel(new String[]{"№","Folder","Files"}));
-		
+
 	
 		
 		addFolderButton.addActionListener(new ActionListener() {
@@ -50,7 +51,7 @@ public class MoveNotesUI {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			
-				addFolderDialog.setSize(400, 100);
+				addFolderDialog.setSize(600, 400);
 			
 				JPanel submitPanel = new JPanel();
 				addFolderDialog.getContentPane().add(submitPanel);
@@ -59,9 +60,10 @@ public class MoveNotesUI {
 				JTextField aliasValue = new JTextField(26);
 				submitPanel.add(labelAlias);
 				submitPanel.add(aliasValue);
-				JLabel labelPathToDir = new JLabel("Path to dir");
-				JTextField pathToMediaDir = new JTextField(26);
-				submitPanel.add(labelPathToDir);
+							
+				JFileChooser pathToMediaDir = new JFileChooser();
+				pathToMediaDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				
 				submitPanel.add(pathToMediaDir);
 				JButton submit = new JButton("Submit");
 				submit.addActionListener(new ActionListener() {
@@ -69,14 +71,13 @@ public class MoveNotesUI {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						addFolderDialog.setVisible(false);
-						File movieDir = new File(pathToMediaDir.getText());
+						File movieDir = pathToMediaDir.getSelectedFile();
 						
 						for(File movieFile : movieDir.listFiles()){
-							//"./etc/movie.db.txt"
-							movie.add("./etc/movie.db.txt",dataModel,aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName());
+							movie.add("./etc/movie.db.txt",dataModel,aliasValue.getText(),pathToMediaDir.getSelectedFile().getAbsolutePath() + "/",movieFile.getName());
 						}	
 						aliasValue.setText(null);
-						pathToMediaDir.setText(null);
+						
 					}
 				});
 				submitPanel.add(submit);
@@ -88,7 +89,16 @@ public class MoveNotesUI {
 
 		frame.getContentPane().add(buttonPanel,BorderLayout.NORTH);
 		
-		JTable mediaFiles = new JTable();
+		JTable mediaFiles = new JTable(){
+
+			@Override
+			public String getToolTipText(MouseEvent event) {
+				JTable table = (JTable)event.getSource();				
+				int selectedRow = getRowNumber(event, (JTable)event.getSource());
+				return movie.getPathByAlias(table.getModel().getValueAt(selectedRow, 1)) + table.getModel().getValueAt(selectedRow, 2);
+			}
+			
+		};
 		
 
 		mediaFiles.setModel(dataModel);
@@ -107,20 +117,22 @@ public class MoveNotesUI {
 				if(e.getClickCount() == 2){
 				try {
 					JTable table  = (JTable)e.getSource();
-					Point p = e.getPoint();
-					int rowAtPoint = table.rowAtPoint(p);
+					int rowAtPoint = getRowNumber(e, table);
 					System.out.println("Clicked row: " + rowAtPoint);
 					System.out.println("File name:" + table.getValueAt(rowAtPoint, 2));
 					
 					String movieFile = movie.getPathByAlias(table.getValueAt(rowAtPoint, 1))  + table.getValueAt(rowAtPoint, 2);
 					if(movieFile == null)
 						throw new RuntimeException("Movie file is not provided.");
+					System.out.println(movieFile);
 					Runtime.getRuntime().exec("totem " + movieFile);
 				} catch (IOException ex) {
 					// TODO Auto-generated catch block
 					ex.printStackTrace();
 				}}
 			}
+
+			
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
@@ -150,6 +162,12 @@ public class MoveNotesUI {
 		frame.setVisible(true);
 	}
 
+	private static int getRowNumber(MouseEvent e, JTable table) {
+		Point p = e.getPoint();
+		int rowAtPoint = table.rowAtPoint(p);
+		return rowAtPoint;
+	}
+	
 	public static DefaultTableModel fillDataModel(DefaultTableModel dataModel,
 			Object[][] rows) {
 		dataModel.addRow(rows[0]);
@@ -158,7 +176,15 @@ public class MoveNotesUI {
 	}
 
 	private static DefaultTableModel createTableModel(String[] columns) {
-		DefaultTableModel dataModel = new DefaultTableModel();
+		DefaultTableModel dataModel = new DefaultTableModel(){
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				
+				return false;
+			}
+			
+		};
 		for(int c = 0;c<columns.length;c++)
 			dataModel.addColumn(columns[c]);
 		return dataModel;
