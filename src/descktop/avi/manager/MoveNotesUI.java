@@ -36,7 +36,6 @@ public class MoveNotesUI {
 	private static void movieNotes(String[][] loadedMovies) {
 		JFrame frame = new JFrame("Movie Notes");				
 		JPanel buttonPanel = new JPanel();
-		JDialog addFolderDialog = new JDialog(frame);
 		JButton addFolderButton = new JButton("Add Folder");
 		Movie movie = new Movie();
 		
@@ -45,46 +44,9 @@ public class MoveNotesUI {
 		DefaultTableModel dataModel = movie.initTableModel(loadedMovies,createTableModel(new String[]{"№","Folder","Files"}));
 
 	
-		
-		addFolderButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-			
-				addFolderDialog.setSize(600, 400);
-			
-				JPanel submitPanel = new JPanel();
-				addFolderDialog.getContentPane().add(submitPanel);
-				
-				JLabel labelAlias = new JLabel("Alias");
-				JTextField aliasValue = new JTextField(26);
-				submitPanel.add(labelAlias);
-				submitPanel.add(aliasValue);
-							
-				JFileChooser pathToMediaDir = new JFileChooser();
-				pathToMediaDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				
-				submitPanel.add(pathToMediaDir);
-				JButton submit = new JButton("Submit");
-				submit.addActionListener(new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						addFolderDialog.setVisible(false);
-						File movieDir = pathToMediaDir.getSelectedFile();
-						
-						for(File movieFile : movieDir.listFiles()){
-							movie.add("./etc/movie.db.txt",dataModel,aliasValue.getText(),pathToMediaDir.getSelectedFile().getAbsolutePath() + "/",movieFile.getName());
-						}	
-						aliasValue.setText(null);
-						
-					}
-				});
-				submitPanel.add(submit);
-				addFolderDialog.setVisible(true);
-				
-			}
-		});
+		String pathToMovieDb = "./etc/movie.db.txt";
+		ActionListener listener = createAddFolderListener(new JDialog(frame), movie, dataModel,pathToMovieDb);
+		addFolderButton.addActionListener(listener);
 		buttonPanel.add(addFolderButton);
 
 		frame.getContentPane().add(buttonPanel,BorderLayout.NORTH);
@@ -160,6 +122,66 @@ public class MoveNotesUI {
 		frame.setSize(300, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+	}
+
+	private static ActionListener createAddFolderListener(
+			JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel, String pathToMovieDb) {
+		return new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			
+				addFolderDialog.setSize(600, 400);
+			
+				JPanel submitPanel = new JPanel();
+				addFolderDialog.getContentPane().add(submitPanel);
+				
+				JLabel labelAlias = new JLabel("Alias");
+				JTextField aliasValue = new JTextField(26);
+				submitPanel.add(labelAlias);
+				submitPanel.add(aliasValue);
+							
+				JFileChooser pathToMediaDir = new JFileChooser();
+				pathToMediaDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				
+				submitPanel.add(pathToMediaDir);
+				
+				JButton submit = new JButton("Submit");
+				submit.addActionListener(
+						cretaeSubmitFolderListener(
+								addFolderDialog, movie, dataModel,
+								pathToMovieDb, aliasValue, pathToMediaDir));
+				submitPanel.add(submit);
+				addFolderDialog.setVisible(true);
+				
+			}
+
+			private ActionListener cretaeSubmitFolderListener(
+					JDialog addFolderDialog, Movie movie,
+					DefaultTableModel dataModel, String pathToMovieDb,
+					JTextField aliasValue, JFileChooser pathToMediaDir) {
+				return new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						addFolderDialog.setVisible(false);
+						File movieDir = pathToMediaDir.getSelectedFile();
+						
+						for(File movieFile : movieDir.listFiles()){
+							movie.add(pathToMovieDb
+									,dataModel
+									,aliasValue.getText()
+									,pathToMediaDir
+										.getSelectedFile()
+										.getAbsolutePath() + "/"
+										,movieFile.getName());
+						}	
+						aliasValue.setText(null);
+						
+					}
+				};
+			}
+		};
 	}
 
 	private static int getRowNumber(MouseEvent e, JTable table) {
