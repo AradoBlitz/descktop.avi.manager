@@ -126,33 +126,13 @@ public class MoveNotesUI {
 
 	private static ActionListener createAddFolderListener(
 			JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel, String pathToMovieDb) {
+		AddFolderDialog dialog = new AddFolderDialog(addFolderDialog,movie,dataModel,pathToMovieDb);
 		return new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-			
-				addFolderDialog.setSize(600, 400);
-			
-				JPanel submitPanel = new JPanel();
-				addFolderDialog.getContentPane().add(submitPanel);
+				dialog.createDialog();
 				
-				JLabel labelAlias = new JLabel("Alias");
-				JTextField aliasValue = new JTextField(26);
-				submitPanel.add(labelAlias);
-				submitPanel.add(aliasValue);
-							
-				JFileChooser pathToMediaDir = new JFileChooser();
-				pathToMediaDir.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				
-				submitPanel.add(pathToMediaDir);
-				
-				JButton submit = new JButton("Submit");
-				submit.addActionListener(
-						cretaeSubmitFolderListener(
-								addFolderDialog, movie, dataModel,
-								pathToMovieDb, aliasValue, pathToMediaDir));
-				submitPanel.add(submit);
-				addFolderDialog.setVisible(true);
 				
 			}
 
