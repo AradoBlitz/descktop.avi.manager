@@ -131,7 +131,15 @@ public class MoveNotesUI {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialog.createDialog();
+				dialog.createDialog(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						dialog.submit();
+						
+					}
+					
+				});
 				
 				
 			}
