@@ -14,36 +14,17 @@ import javax.swing.table.DefaultTableModel;
 
 public class AddFolderDialog {
 
-	private JDialog addFolderDialog;
-	private Movie movie;
-	private DefaultTableModel dataModel;
-	private String pathToMovieDb;
+	
 	private JFileChooser pathToMediaDir;
 	private JTextField aliasValue;
 
-	public AddFolderDialog(JDialog addFolderDialog, Movie movie,
-			DefaultTableModel dataModel, String pathToMovieDb) {
-				this.addFolderDialog = addFolderDialog;
-				this.movie = movie;
-				this.dataModel = dataModel;
-				this.pathToMovieDb = pathToMovieDb;
-	}
-
-	public void createDialog() {
-		createDialog(addFolderDialog,new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				submit(addFolderDialog);
+	public AddFolderDialog() {
 				
-			}
-			
-		});
-		
-		
 	}
 
-	protected void submit(JDialog addFolderDialog) {
+	
+
+	protected void submit(JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel, String pathToMovieDb) {
 		addFolderDialog.setVisible(false);
 		File movieDir = pathToMediaDir.getSelectedFile();
 		
@@ -83,29 +64,5 @@ public class AddFolderDialog {
 		
 	}
 
-	private ActionListener cretaeSubmitFolderListener(
-			JDialog addFolderDialog, Movie movie,
-			DefaultTableModel dataModel, String pathToMovieDb,
-			JTextField aliasValue, JFileChooser pathToMediaDir) {
-		return new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				addFolderDialog.setVisible(false);
-				File movieDir = pathToMediaDir.getSelectedFile();
-				
-				for(File movieFile : movieDir.listFiles()){
-					movie.add(pathToMovieDb
-							,dataModel
-							,aliasValue.getText()
-							,pathToMediaDir
-								.getSelectedFile()
-								.getAbsolutePath() + "/"
-								,movieFile.getName());
-				}	
-				aliasValue.setText(null);
-				
-			}
-		};
-	}
+	
 }

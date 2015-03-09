@@ -126,7 +126,7 @@ public class MoveNotesUI {
 
 	private static ActionListener createAddFolderListener(
 			JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel, String pathToMovieDb) {
-		AddFolderDialog dialog = new AddFolderDialog(addFolderDialog,movie,dataModel,pathToMovieDb);
+		AddFolderDialog dialog = new AddFolderDialog();
 		return new ActionListener() {
 			
 			@Override
@@ -135,7 +135,7 @@ public class MoveNotesUI {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						dialog.submit(addFolderDialog);
+						dialog.submit(addFolderDialog, movie,dataModel,pathToMovieDb);
 						
 					}
 					
