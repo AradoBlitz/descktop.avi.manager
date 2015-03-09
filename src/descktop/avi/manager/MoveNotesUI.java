@@ -131,11 +131,11 @@ public class MoveNotesUI {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialog.createDialog(new ActionListener(){
+				dialog.createDialog(addFolderDialog,new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						dialog.submit();
+						dialog.submit(addFolderDialog);
 						
 					}
 					

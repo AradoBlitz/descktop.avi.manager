@@ -30,11 +30,11 @@ public class AddFolderDialog {
 	}
 
 	public void createDialog() {
-		createDialog(new ActionListener(){
+		createDialog(addFolderDialog,new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				submit();
+				submit(addFolderDialog);
 				
 			}
 			
@@ -43,7 +43,7 @@ public class AddFolderDialog {
 		
 	}
 
-	protected void submit() {
+	protected void submit(JDialog addFolderDialog) {
 		addFolderDialog.setVisible(false);
 		File movieDir = pathToMediaDir.getSelectedFile();
 		
@@ -60,9 +60,9 @@ public class AddFolderDialog {
 		
 	}
 
-	public void createDialog(ActionListener actionListener) {
+	public void createDialog(JDialog addFolderDialog, ActionListener actionListener) {
 		addFolderDialog.setSize(600, 400);
-		
+		 
 		JPanel submitPanel = new JPanel();
 		addFolderDialog.getContentPane().add(submitPanel);
 		
