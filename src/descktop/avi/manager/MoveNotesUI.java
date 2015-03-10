@@ -34,15 +34,19 @@ public class MoveNotesUI {
 	}
 
 	private static void movieNotes(String[][] loadedMovies) {
+		String pathToMovieDb = "./etc/movie.db.txt";
+		Movie movie = new Movie();		
+		DefaultTableModel dataModel = movie.initTableModel(loadedMovies,createTableModel(new String[]{"№","Folder","Files"}));
+
+		
+		movieNotes(movie, dataModel);
+	}
+
+	private static void movieNotes(Movie movie, DefaultTableModel dataModel) {
 		JFrame frame = new JFrame("Movie Notes");				
 		JPanel buttonPanel = new JPanel();
 		JButton addFolderButton = new JButton("Add Folder");
-		Movie movie = new Movie();
 		
-		
-		
-		DefaultTableModel dataModel = movie.initTableModel(loadedMovies,createTableModel(new String[]{"№","Folder","Files"}));
-
 	
 		String pathToMovieDb = "./etc/movie.db.txt";
 		ActionListener listener = createAddFolderListener(new JDialog(frame), movie, dataModel,pathToMovieDb);
@@ -65,7 +69,19 @@ public class MoveNotesUI {
 
 		mediaFiles.setModel(dataModel);
 		mediaFiles.createDefaultColumnsFromModel();
-		mediaFiles.addMouseListener(new MouseListener() {
+		mediaFiles.addMouseListener(createPlayMovieListener(movie));
+		
+		JScrollPane comp = new JScrollPane(mediaFiles);
+
+		frame.getContentPane().add(comp,BorderLayout.CENTER);
+				
+		frame.setSize(300, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+	}
+
+	private static MouseListener createPlayMovieListener(Movie movie) {
+		return new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -113,15 +129,7 @@ public class MoveNotesUI {
 				
 				
 			}
-		});
-		
-		JScrollPane comp = new JScrollPane(mediaFiles);
-
-		frame.getContentPane().add(comp,BorderLayout.CENTER);
-				
-		frame.setSize(300, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+		};
 	}
 
 	private static ActionListener createAddFolderListener(
