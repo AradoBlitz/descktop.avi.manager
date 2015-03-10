@@ -54,16 +54,7 @@ public class MoveNotesUI {
 
 		frame.getContentPane().add(buttonPanel,BorderLayout.NORTH);
 		
-		JTable mediaFiles = new JTable(){
-
-			@Override
-			public String getToolTipText(MouseEvent event) {
-				JTable table = (JTable)event.getSource();				
-				int selectedRow = getRowNumber(event, (JTable)event.getSource());
-				return movie.getPathByAlias(table.getModel().getValueAt(selectedRow, 1)) + table.getModel().getValueAt(selectedRow, 2);
-			}
-			
-		};
+		JTable mediaFiles = createTable(movie);
 		
 
 		mediaFiles.setModel(dataModel);
@@ -77,6 +68,20 @@ public class MoveNotesUI {
 		frame.setSize(300, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+	}
+
+	private static JTable createTable(Movie movie) {
+		JTable mediaFiles = new JTable(){
+
+			@Override
+			public String getToolTipText(MouseEvent event) {
+				JTable table = (JTable)event.getSource();				
+				int selectedRow = getRowNumber(event, (JTable)event.getSource());
+				return movie.getPathByAlias(table.getModel().getValueAt(selectedRow, 1)) + table.getModel().getValueAt(selectedRow, 2);
+			}
+			
+		};
+		return mediaFiles;
 	}
 
 	private static MouseListener createPlayMovieListener(Movie movie) {
