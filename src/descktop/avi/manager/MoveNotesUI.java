@@ -35,7 +35,7 @@ public class MoveNotesUI {
 
 	private static void movieNotes(String[][] loadedMovies) {
 		String pathToMovieDb = "./etc/movie.db.txt";
-		Movie movie = new Movie();		
+		Movie movie = new Movie(pathToMovieDb);		
 		DefaultTableModel dataModel = movie.initTableModel(loadedMovies,createTableModel(new String[]{"№","Folder","Files"}));
 
 		
@@ -48,8 +48,7 @@ public class MoveNotesUI {
 		JButton addFolderButton = new JButton("Add Folder");
 		
 	
-		String pathToMovieDb = "./etc/movie.db.txt";
-		ActionListener listener = createAddFolderListener(new JDialog(frame), movie, dataModel,pathToMovieDb);
+		ActionListener listener = createAddFolderListener(new JDialog(frame), movie, dataModel);
 		addFolderButton.addActionListener(listener);
 		buttonPanel.add(addFolderButton);
 
@@ -133,7 +132,7 @@ public class MoveNotesUI {
 	}
 
 	private static ActionListener createAddFolderListener(
-			JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel, String pathToMovieDb) {
+			JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel) {
 		AddFolderDialog dialog = new AddFolderDialog();
 		return new ActionListener() {
 			
@@ -146,7 +145,7 @@ public class MoveNotesUI {
 						@Override
 						public void actionPerformed(ActionEvent e) {
 							addFolderDialog.setVisible(false);
-							dialog.submit(movie,dataModel,pathToMovieDb);
+							dialog.submit(movie,dataModel);
 					}
 									
 				});

@@ -13,6 +13,17 @@ public class Movie {
 	
     private int i = 1;
 
+	private String pathToStorage = NO_PATH_TO_DB;
+
+    public Movie(){
+    	this(null);
+    }
+    
+    public Movie(String pathToStorage){
+		this.pathToStorage = pathToStorage;
+    	
+    }
+    
     public DefaultTableModel initTableModel(String[][] strings, DefaultTableModel createTableModel) {
 		
 		add(strings);
@@ -37,11 +48,11 @@ public class Movie {
 	}
 	public void add(DefaultTableModel dataModel, String text, String text2, String name) {
 		//new FileMoviesDataBase().saveTo("./etc/movie.db.txt",new String[][]{{aliasValue.getText(),pathToMediaDir.getText(),movieFile.getName()}});
-		add(NO_PATH_TO_DB,dataModel,text,text2,name);
+		add(pathToStorage,dataModel,text,text2,name);
 		
 		
 	}
-	
+		
 	public void add(String noPathToDb, DefaultTableModel dataModel,
 			String text, String text2, String name) {
 		try {

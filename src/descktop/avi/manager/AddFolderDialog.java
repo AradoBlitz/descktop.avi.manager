@@ -24,14 +24,14 @@ public class AddFolderDialog {
 
 	
 
-	protected void submit(Movie movie, DefaultTableModel dataModel, String pathToMovieDb) {
+	protected void submit(Movie movie, DefaultTableModel dataModel) {
 		
 		File movieDir = pathToMediaDir.getSelectedFile();
 		String alias = aliasValue.getText();
 		String absolutePath = pathToMediaDir
 			.getSelectedFile()
 			.getAbsolutePath();
-		submitSelectedDirectory(movie, dataModel, pathToMovieDb, movieDir,
+		submitSelectedDirectory(movie, dataModel, movieDir,
 				alias, absolutePath);	
 		aliasValue.setText(null);
 		
@@ -40,11 +40,10 @@ public class AddFolderDialog {
 
 
 	public void submitSelectedDirectory(Movie movie,
-			DefaultTableModel dataModel, String pathToMovieDb, File movieDir,
+			DefaultTableModel dataModel, File movieDir,
 			String alias, String absolutePath) {
 		for(File movieFile : movieDir.listFiles()){			
-			movie.add(pathToMovieDb
-					,dataModel
+			movie.add(dataModel
 					,alias
 					,absolutePath + "/"
 						,movieFile.getName());
