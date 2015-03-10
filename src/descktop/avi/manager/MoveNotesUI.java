@@ -43,31 +43,44 @@ public class MoveNotesUI {
 	}
 
 	private static void movieNotes(Movie movie, DefaultTableModel dataModel) {
-		JFrame frame = new JFrame("Movie Notes");				
-		JPanel buttonPanel = new JPanel();
-		JButton addFolderButton = new JButton("Add Folder");
+		JFrame frame = new JFrame("Movie Notes");
+		frame
+			.getContentPane()
+			.add(creatAddMovieFolderPanel(movie, dataModel,
+				new JDialog(frame))
+			,BorderLayout.NORTH);
 		
-	
-		ActionListener listener = createAddFolderListener(new JDialog(frame), movie, dataModel);
-		addFolderButton.addActionListener(listener);
-		buttonPanel.add(addFolderButton);
-
-		frame.getContentPane().add(buttonPanel,BorderLayout.NORTH);
-		
-		JTable mediaFiles = createTable(movie);
-		
-
-		mediaFiles.setModel(dataModel);
-		mediaFiles.createDefaultColumnsFromModel();
-		mediaFiles.addMouseListener(createPlayMovieListener(movie));
-		
-		JScrollPane comp = new JScrollPane(mediaFiles);
-
-		frame.getContentPane().add(comp,BorderLayout.CENTER);
+		frame
+			.getContentPane()
+			.add(
+					new JScrollPane(
+							configureMediaFilesTable(
+									createTable(movie)
+									,createPlayMovieListener(movie)
+									, dataModel))
+			,BorderLayout.CENTER);
 				
 		frame.setSize(300, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+	}
+
+	private static JTable configureMediaFilesTable(JTable mediaFiles, MouseListener createPlayMovieListener,
+			DefaultTableModel dataModel) {
+		mediaFiles.setModel(dataModel);
+		mediaFiles.createDefaultColumnsFromModel();
+		mediaFiles.addMouseListener(createPlayMovieListener);
+		
+		return mediaFiles;
+	}
+
+	private static JPanel creatAddMovieFolderPanel(Movie movie,
+			DefaultTableModel dataModel, JDialog addFolderDialog) {
+		JPanel buttonPanel = new JPanel();
+		JButton addFolderButton = new JButton("Add Folder");		
+		addFolderButton.addActionListener(createAddFolderListener(addFolderDialog, movie, dataModel));
+		buttonPanel.add(addFolderButton);
+		return buttonPanel;
 	}
 
 	private static JTable createTable(Movie movie) {
