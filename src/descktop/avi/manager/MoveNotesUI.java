@@ -2,22 +2,17 @@ package descktop.avi.manager;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class MoveNotesUI {
@@ -26,7 +21,23 @@ public class MoveNotesUI {
 		String[][] loadedMovies = new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}};
 		
 		try {
-			movieNotes(new FileMoviesDataBase().loadMelodies("./etc/movie.db.txt"));
+			String pathToMovieDb = "./etc/movie.db.txt";
+			Movie movie = new Movie(pathToMovieDb);		
+			DefaultTableModel dataModel = movie.initTableModel(new FileMoviesDataBase().loadMelodies("./etc/movie.db.txt"),createTableModel(new String[]{"№","Folder","Files"}));
+			
+			
+			JFrame frame = new JFrame("Movie Notes");
+			addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
+				new JDialog(frame), new AddFolderDialog()), BorderLayout.NORTH);
+			
+			addTable(frame, configureMediaFilesTable(
+					createTable(movie)
+					,createPlayMovieListener(movie)
+					, dataModel), BorderLayout.CENTER);
+					
+			frame.setSize(300, 300);
+			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.setVisible(true);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block 
 			e.printStackTrace();
@@ -39,13 +50,24 @@ public class MoveNotesUI {
 		DefaultTableModel dataModel = movie.initTableModel(loadedMovies,createTableModel(new String[]{"№","Folder","Files"}));
 
 		
-		movieNotes(movie, dataModel);
+		JFrame frame = new JFrame("Movie Notes");
+		addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
+			new JDialog(frame),new AddFolderDialog()), BorderLayout.NORTH);
+		
+		addTable(frame, configureMediaFilesTable(
+				createTable(movie)
+				,createPlayMovieListener(movie)
+				, dataModel), BorderLayout.CENTER);
+				
+		frame.setSize(300, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
 	}
 
 	private static void movieNotes(Movie movie, DefaultTableModel dataModel) {
 		JFrame frame = new JFrame("Movie Notes");
 		addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
-			new JDialog(frame)), BorderLayout.NORTH);
+			new JDialog(frame), new AddFolderDialog()), BorderLayout.NORTH);
 		
 		addTable(frame, configureMediaFilesTable(
 				createTable(movie)
@@ -85,10 +107,11 @@ public class MoveNotesUI {
 	}
 
 	private static JPanel creatAddMovieFolderPanel(Movie movie,
-			DefaultTableModel dataModel, JDialog addFolderDialog) {
+			DefaultTableModel dataModel, JDialog addFolderDialog,AddFolderDialog addFolderDialog2) {
 		JPanel buttonPanel = new JPanel();
 		JButton addFolderButton = new JButton("Add Folder");		
-		addFolderButton.addActionListener(createAddFolderListener(addFolderDialog, movie, dataModel));
+		
+		addFolderButton.addActionListener(addFolderDialog2.createAddFolderListener(addFolderDialog, movie, dataModel));
 		buttonPanel.add(addFolderButton);
 		return buttonPanel;
 	}
@@ -162,25 +185,8 @@ public class MoveNotesUI {
 	private static ActionListener createAddFolderListener(
 			JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel) {
 		AddFolderDialog dialog = new AddFolderDialog();
-		return new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				addFolderDialog.setSize(600, 400);
-				
-				JPanel submitPanel = dialog.createDialogPanel(new ActionListener(){
-				
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							addFolderDialog.setVisible(false);
-							dialog.submit(movie,dataModel);
-					}
-									
-				});
-				addFolderDialog.getContentPane().add(submitPanel);
-				addFolderDialog.setVisible(true);				
-			}
-		};
+		return dialog.createAddFolderListener(addFolderDialog,movie,dataModel);
+		
 	}
 
 	private static int getRowNumber(MouseEvent e, JTable table) {

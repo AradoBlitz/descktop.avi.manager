@@ -80,5 +80,29 @@ public class AddFolderDialog {
 		return submitPanel;
 	}
 
+
+
+	public ActionListener createAddFolderListener(JDialog addFolderDialog,
+			Movie movie, DefaultTableModel dataModel) {
+			return new ActionListener() {
+						
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							addFolderDialog.setSize(600, 400);
+							
+							JPanel submitPanel = createDialogPanel(new ActionListener(){
+							
+									@Override
+									public void actionPerformed(ActionEvent e) {
+										addFolderDialog.setVisible(false);
+										submit(movie,dataModel);
+								}
+												
+							});
+							addFolderDialog.getContentPane().add(submitPanel);
+							addFolderDialog.setVisible(true);				
+						}
+					}; 
+				}
 	
 }
