@@ -2,6 +2,7 @@ package descktop.avi.manager;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -111,7 +112,7 @@ public class MoveNotesUI {
 		JPanel buttonPanel = new JPanel();
 		JButton addFolderButton = new JButton("Add Folder");		
 		
-		addFolderButton.addActionListener(addFolderDialog2.createAddFolderListener(addFolderDialog, movie, dataModel));
+		addFolderButton.addActionListener(createAddFolderListener(addFolderDialog, addFolderDialog2,movie, dataModel));
 		buttonPanel.add(addFolderButton);
 		return buttonPanel;
 	}
@@ -183,10 +184,28 @@ public class MoveNotesUI {
 	}
 
 	private static ActionListener createAddFolderListener(
-			JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel) {
-		AddFolderListeners dialog = new AddFolderListeners();
-		return dialog.createAddFolderListener(addFolderDialog,movie,dataModel);
+			JDialog addFolderDialog, AddFolderListeners dialog,  Movie movie, DefaultTableModel dataModel) {
 		
+		return new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addFolderDialog.setSize(600, 400);
+				
+				JPanel submitPanel = dialog.createDialogPanel(new ActionListener(){
+				
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							addFolderDialog.setVisible(false);
+							dialog.submit(movie,dataModel);
+					}
+									
+				});
+				addFolderDialog.getContentPane().add(submitPanel);
+				addFolderDialog.setVisible(true);				
+			}
+		}; 
+			
 	}
 
 	private static int getRowNumber(MouseEvent e, JTable table) {
