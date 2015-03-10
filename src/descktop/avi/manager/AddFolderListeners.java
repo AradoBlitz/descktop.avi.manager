@@ -12,13 +12,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class AddFolderDialog {
+public class AddFolderListeners {
 
 	
 	private JFileChooser pathToMediaDir;
 	private JTextField aliasValue;
 
-	public AddFolderDialog() {
+	public AddFolderListeners() {
 				
 	}
 

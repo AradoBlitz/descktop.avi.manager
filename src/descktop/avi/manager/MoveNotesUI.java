@@ -28,7 +28,7 @@ public class MoveNotesUI {
 			
 			JFrame frame = new JFrame("Movie Notes");
 			addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
-				new JDialog(frame), new AddFolderDialog()), BorderLayout.NORTH);
+				new JDialog(frame), new AddFolderListeners()), BorderLayout.NORTH);
 			
 			addTable(frame, configureMediaFilesTable(
 					createTable(movie)
@@ -52,7 +52,7 @@ public class MoveNotesUI {
 		
 		JFrame frame = new JFrame("Movie Notes");
 		addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
-			new JDialog(frame),new AddFolderDialog()), BorderLayout.NORTH);
+			new JDialog(frame),new AddFolderListeners()), BorderLayout.NORTH);
 		
 		addTable(frame, configureMediaFilesTable(
 				createTable(movie)
@@ -67,7 +67,7 @@ public class MoveNotesUI {
 	private static void movieNotes(Movie movie, DefaultTableModel dataModel) {
 		JFrame frame = new JFrame("Movie Notes");
 		addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
-			new JDialog(frame), new AddFolderDialog()), BorderLayout.NORTH);
+			new JDialog(frame), new AddFolderListeners()), BorderLayout.NORTH);
 		
 		addTable(frame, configureMediaFilesTable(
 				createTable(movie)
@@ -107,7 +107,7 @@ public class MoveNotesUI {
 	}
 
 	private static JPanel creatAddMovieFolderPanel(Movie movie,
-			DefaultTableModel dataModel, JDialog addFolderDialog,AddFolderDialog addFolderDialog2) {
+			DefaultTableModel dataModel, JDialog addFolderDialog,AddFolderListeners addFolderDialog2) {
 		JPanel buttonPanel = new JPanel();
 		JButton addFolderButton = new JButton("Add Folder");		
 		
@@ -184,7 +184,7 @@ public class MoveNotesUI {
 
 	private static ActionListener createAddFolderListener(
 			JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel) {
-		AddFolderDialog dialog = new AddFolderDialog();
+		AddFolderListeners dialog = new AddFolderListeners();
 		return dialog.createAddFolderListener(addFolderDialog,movie,dataModel);
 		
 	}
