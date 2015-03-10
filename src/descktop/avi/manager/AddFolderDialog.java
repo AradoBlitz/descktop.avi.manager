@@ -24,28 +24,46 @@ public class AddFolderDialog {
 
 	
 
-	protected void submit(JDialog addFolderDialog, Movie movie, DefaultTableModel dataModel, String pathToMovieDb) {
-		addFolderDialog.setVisible(false);
-		File movieDir = pathToMediaDir.getSelectedFile();
+	protected void submit(Movie movie, DefaultTableModel dataModel, String pathToMovieDb) {
 		
-		for(File movieFile : movieDir.listFiles()){
-			movie.add(pathToMovieDb
-					,dataModel
-					,aliasValue.getText()
-					,pathToMediaDir
-						.getSelectedFile()
-						.getAbsolutePath() + "/"
-						,movieFile.getName());
-		}	
+		File movieDir = pathToMediaDir.getSelectedFile();
+		String alias = aliasValue.getText();
+		String absolutePath = pathToMediaDir
+			.getSelectedFile()
+			.getAbsolutePath();
+		submitSelectedDirectory(movie, dataModel, pathToMovieDb, movieDir,
+				alias, absolutePath);	
 		aliasValue.setText(null);
 		
+	}
+
+
+
+	public void submitSelectedDirectory(Movie movie,
+			DefaultTableModel dataModel, String pathToMovieDb, File movieDir,
+			String alias, String absolutePath) {
+		for(File movieFile : movieDir.listFiles()){			
+			movie.add(pathToMovieDb
+					,dataModel
+					,alias
+					,absolutePath + "/"
+						,movieFile.getName());
+		}
 	}
 
 	public void createDialog(JDialog addFolderDialog, ActionListener actionListener) {
 		addFolderDialog.setSize(600, 400);
 		 
-		JPanel submitPanel = new JPanel();
+		JPanel submitPanel = createDialogPanel(actionListener);
 		addFolderDialog.getContentPane().add(submitPanel);
+		addFolderDialog.setVisible(true);
+		
+	}
+
+
+
+	public JPanel createDialogPanel(ActionListener actionListener) {
+		JPanel submitPanel = new JPanel();		
 		
 		JLabel labelAlias = new JLabel("Alias");
 		aliasValue = new JTextField(26);
@@ -60,8 +78,7 @@ public class AddFolderDialog {
 		JButton submit = new JButton("Submit");
 		submit.addActionListener(actionListener);
 		submitPanel.add(submit);
-		addFolderDialog.setVisible(true);
-		
+		return submitPanel;
 	}
 
 	

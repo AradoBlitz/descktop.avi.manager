@@ -131,43 +131,19 @@ public class MoveNotesUI {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dialog.createDialog(addFolderDialog,new ActionListener(){
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						dialog.submit(addFolderDialog, movie,dataModel,pathToMovieDb);
-						
+				addFolderDialog.setSize(600, 400);
+				
+				JPanel submitPanel = dialog.createDialogPanel(new ActionListener(){
+				
+						@Override
+						public void actionPerformed(ActionEvent e) {
+							addFolderDialog.setVisible(false);
+							dialog.submit(movie,dataModel,pathToMovieDb);
 					}
-					
+									
 				});
-				
-				
-			}
-
-			private ActionListener cretaeSubmitFolderListener(
-					JDialog addFolderDialog, Movie movie,
-					DefaultTableModel dataModel, String pathToMovieDb,
-					JTextField aliasValue, JFileChooser pathToMediaDir) {
-				return new ActionListener() {
-					
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						addFolderDialog.setVisible(false);
-						File movieDir = pathToMediaDir.getSelectedFile();
-						
-						for(File movieFile : movieDir.listFiles()){
-							movie.add(pathToMovieDb
-									,dataModel
-									,aliasValue.getText()
-									,pathToMediaDir
-										.getSelectedFile()
-										.getAbsolutePath() + "/"
-										,movieFile.getName());
-						}	
-						aliasValue.setText(null);
-						
-					}
-				};
+				addFolderDialog.getContentPane().add(submitPanel);
+				addFolderDialog.setVisible(true);				
 			}
 		};
 	}
