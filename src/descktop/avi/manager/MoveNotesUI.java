@@ -44,25 +44,35 @@ public class MoveNotesUI {
 
 	private static void movieNotes(Movie movie, DefaultTableModel dataModel) {
 		JFrame frame = new JFrame("Movie Notes");
-		frame
-			.getContentPane()
-			.add(creatAddMovieFolderPanel(movie, dataModel,
-				new JDialog(frame))
-			,BorderLayout.NORTH);
+		addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
+			new JDialog(frame)), BorderLayout.NORTH);
 		
-		frame
-			.getContentPane()
-			.add(
-					new JScrollPane(
-							configureMediaFilesTable(
-									createTable(movie)
-									,createPlayMovieListener(movie)
-									, dataModel))
-			,BorderLayout.CENTER);
+		addTable(frame, configureMediaFilesTable(
+				createTable(movie)
+				,createPlayMovieListener(movie)
+				, dataModel), BorderLayout.CENTER);
 				
 		frame.setSize(300, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+	}
+
+	private static void addTable(JFrame frame, JTable configureMediaFilesTable,
+			String center) {
+		frame
+			.getContentPane()
+			.add(
+					new JScrollPane(
+							configureMediaFilesTable)
+			,center);
+	}
+
+	private static void addPanel(JFrame frame, JPanel creatAddMovieFolderPanel,
+			String north) {
+		frame
+			.getContentPane()
+			.add(creatAddMovieFolderPanel
+			,north);
 	}
 
 	private static JTable configureMediaFilesTable(JTable mediaFiles, MouseListener createPlayMovieListener,
