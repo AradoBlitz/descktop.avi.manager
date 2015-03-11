@@ -16,7 +16,7 @@ public class AddFolderEmbeddedFileChooser  extends AddFolderDialog{
 	private JFileChooser pathToMediaDir;
 	private JTextField aliasValue;
 
-	protected void submit(Movie movie, DefaultTableModel dataModel) {
+	public void submit(Movie movie, DefaultTableModel dataModel) {
 		
 		File movieDir = pathToMediaDir.getSelectedFile();
 		String alias = aliasValue.getText();

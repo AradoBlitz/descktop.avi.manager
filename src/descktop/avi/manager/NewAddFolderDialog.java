@@ -25,7 +25,7 @@ public class NewAddFolderDialog extends AddFolderDialog{
 
 	
 
-	protected void submit(Movie movie, DefaultTableModel dataModel) {
+	public void submit(Movie movie, DefaultTableModel dataModel) {
 		
 		File movieDir = new File(pathValue.getText());
 		String alias = aliasValue.getText();

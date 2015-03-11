@@ -56,7 +56,7 @@ public class MoveNotesUI {
 			
 			DefaultTableModel model = Main.createTableModel(new String[]{"№","Folder","Files"});
 			Movie movie = new Movie();
-			AddFolderDialog addFolderDialog = new AddFolderDialog();
+			AddFolderDialog addFolderDialog = new AddFolderEmbeddedFileChooser();
 			JPanel createDialogPanel = addFolderDialog.createDialogPanel(new ActionListener() {
 				
 				@Override
@@ -116,7 +116,7 @@ public class MoveNotesUI {
 		
 		JFrame frame = new JFrame("Movie Notes");
 		addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
-			new JDialog(frame),new AddFolderDialog()), BorderLayout.NORTH);
+			new JDialog(frame),new AddFolderEmbeddedFileChooser()), BorderLayout.NORTH);
 		
 		addTable(frame, configureMediaFilesTable(
 				createTable(movie)
@@ -131,7 +131,7 @@ public class MoveNotesUI {
 	private static void movieNotes(Movie movie, DefaultTableModel dataModel) {
 		JFrame frame = new JFrame("Movie Notes");
 		addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
-			new JDialog(frame), new AddFolderDialog()), BorderLayout.NORTH);
+			new JDialog(frame), new AddFolderEmbeddedFileChooser()), BorderLayout.NORTH);
 		
 		addTable(frame, configureMediaFilesTable(
 				createTable(movie)
