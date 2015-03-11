@@ -92,7 +92,7 @@ public class MoveNotesUI {
 			
 			JFrame frame = new JFrame("Movie Notes");
 			addPanel(frame, creatAddMovieFolderPanel(movie, dataModel,
-				new JDialog(frame), new AddFolderDialog()), BorderLayout.NORTH);
+				new JDialog(frame), new NewAddFolderDialog()), BorderLayout.NORTH);
 			
 			addTable(frame, configureMediaFilesTable(
 					createTable(movie)
