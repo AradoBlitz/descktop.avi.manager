@@ -16,7 +16,7 @@ public class Movie {
 	private String pathToStorage = NO_PATH_TO_DB;
 
     public Movie(){
-    	this(null);
+    	this(NO_PATH_TO_DB);
     }
     
     public Movie(String pathToStorage){

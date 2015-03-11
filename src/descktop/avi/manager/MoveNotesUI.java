@@ -1,5 +1,7 @@
 package descktop.avi.manager;
 
+import static org.junit.Assert.assertEquals;
+
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -18,6 +20,67 @@ import javax.swing.table.DefaultTableModel;
 
 public class MoveNotesUI {
 
+	public static class NewTestDialog{
+		public static void main(String[] args){
+			JFrame testFrame = new JFrame("Test Frame");
+			
+			DefaultTableModel model = Main.createTableModel(new String[]{"№","Folder","Files"});
+			Movie movie = new Movie();
+			NewAddFolderDialog addFolderDialog = new NewAddFolderDialog();
+			JPanel createDialogPanel = addFolderDialog.createDialogPanel(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					addFolderDialog.submit(movie, model);
+					assertEquals(3,model.getRowCount());
+					assertEquals(3,model.getColumnCount());
+					assertEquals("Test alias",model.getValueAt(0, 1));
+					assertEquals("CIMG2220.MOV",model.getValueAt(0, 2));
+					assertEquals("/home/dmitriy/Projects/Java/portfolio/etc/",movie.getPathByAlias("Test alias"));
+					testFrame.setVisible(false);
+					System.exit(0);
+					
+				}
+			});
+			testFrame.getContentPane().add(createDialogPanel);
+			testFrame.setSize(600, 600);
+			testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			testFrame.setVisible(true);
+			
+		}
+	}
+	
+	public static class TestDialog{
+		public static void main(String[] args){
+			JFrame testFrame = new JFrame("Test Frame");
+			
+			DefaultTableModel model = Main.createTableModel(new String[]{"№","Folder","Files"});
+			Movie movie = new Movie();
+			AddFolderDialog addFolderDialog = new AddFolderDialog();
+			JPanel createDialogPanel = addFolderDialog.createDialogPanel(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					addFolderDialog.submit(movie, model);
+					assertEquals(3,model.getRowCount());
+					assertEquals(3,model.getColumnCount());
+					assertEquals("Test alias",model.getValueAt(0, 1));
+					assertEquals("CIMG2220.MOV",model.getValueAt(0, 2));
+					assertEquals("/home/dmitriy/Projects/Java/portfolio/etc/",movie.getPathByAlias("Test alias"));
+					testFrame.setVisible(false);
+					System.exit(0);
+					
+				}
+			});
+			testFrame.getContentPane().add(createDialogPanel);
+			testFrame.setSize(600, 600);
+			testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			testFrame.setVisible(true);
+			
+		}
+	}
+	
+	public static class Main{
 	public static void main(String args[]){
 		String[][] loadedMovies = new String[][]{{"etc", "./etc/","CIMG2197.MOV"},{"etc2", "./etc/","CIMG2220.MOV"}};
 		
@@ -234,5 +297,6 @@ public class MoveNotesUI {
 		for(int c = 0;c<columns.length;c++)
 			dataModel.addColumn(columns[c]);
 		return dataModel;
+	}
 	}
 }
